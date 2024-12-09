@@ -3,18 +3,18 @@
  * 1. 如果axios某天不再维护，所有依赖axios的代码都不需要修改，只需要更改封装的代码。
  * 2. 发送请求代码，存在很多相同的逻辑。
  */
-import axios from 'axios'
-import type { AxiosInstance } from 'axios'
-import type { ZTInternalRequestInterceptor, ZTInternalRequestConfig, ZTRequestConfig } from './type'
+import axios from "axios"
+import type { AxiosInstance } from "axios"
+import type { InternalRequestInterceptor, InternalRequestConfig, RequestConfig } from "./type"
 
 // const DEFAULT_LOADING = true
 
-class ZTRequest {
+class Request {
   instance: AxiosInstance
-  interceptors?: ZTInternalRequestInterceptor
+  interceptors?: InternalRequestInterceptor
   // showLoading: boolean
 
-  constructor(config: ZTInternalRequestConfig) {
+  constructor(config: InternalRequestConfig) {
     // 创建axios实例
     this.instance = axios.create(config)
 
@@ -68,7 +68,7 @@ class ZTRequest {
   }
 
   // 封装request方法
-  request<T>(config: ZTRequestConfig<T>): Promise<T> {
+  request<T>(config: RequestConfig<T>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       // 1.单个请求对请求config的处理
       if (config.interceptor?.requestInterceptor) {
@@ -99,21 +99,21 @@ class ZTRequest {
     })
   }
 
-  get<T>(config: ZTRequestConfig<T>): Promise<T> {
-    return this.request<T>({ ...config, method: 'GET' })
+  get<T>(config: RequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: "GET" })
   }
-  post<T>(config: ZTRequestConfig<T>): Promise<T> {
-    return this.request<T>({ ...config, method: 'POST' })
+  post<T>(config: RequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: "POST" })
   }
-  delete<T>(config: ZTRequestConfig<T>): Promise<T> {
-    return this.request<T>({ ...config, method: 'DELETE' })
+  delete<T>(config: RequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: "DELETE" })
   }
-  patch<T>(config: ZTRequestConfig<T>): Promise<T> {
-    return this.request<T>({ ...config, method: 'PATCH' })
+  patch<T>(config: RequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: "PATCH" })
   }
 }
 
-export default ZTRequest
+export default Request
 
 /**
  * 服务器返回失败的2种模式

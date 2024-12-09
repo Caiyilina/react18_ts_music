@@ -1,25 +1,25 @@
-import type { AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse } from 'axios'
+import type { AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse } from "axios"
 
-export interface ZTInternalRequestInterceptor<T = AxiosResponse, R = unknown> {
+export interface InternalRequestInterceptor<T = AxiosResponse, R = unknown> {
   requestInterceptor?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig
   requestInterceptorCatch?: (error: R) => R
   responseInterceptor?: (res: T) => T
   responseInterceptorCatch?: (err: R) => R
 }
 
-export interface ZTInternalRequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
-  interceptor?: ZTInternalRequestInterceptor<T>
+export interface InternalRequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
+  interceptor?: InternalRequestInterceptor<T>
   showLoading?: boolean
 }
 
-export interface ZTRequestInterceptor<T = AxiosResponse, R = unknown> {
+export interface RequestInterceptor<T = AxiosResponse, R = unknown> {
   requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig
   requestInterceptorCatch?: (err: R) => R
   responseInterceptor?: (res: T) => T
   responseInterceptorCatch?: (err: R) => R
 }
 
-export interface ZTRequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
-  interceptor?: ZTRequestInterceptor<T>
+export interface RequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
+  interceptor?: RequestInterceptor<T>
   showLoading?: boolean
 }

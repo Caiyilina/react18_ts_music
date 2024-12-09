@@ -1,7 +1,7 @@
-import ZTRequest from './request'
-import { BASE_URL, TIME_OUT } from './request/config'
+import Request from "./request"
+import { BASE_URL, TIME_OUT } from "./config"
 
-const ztRequest = new ZTRequest({
+const request = new Request({
   baseURL: BASE_URL,
   timeout: TIME_OUT,
   interceptor: {
@@ -28,4 +28,4 @@ const ztRequest = new ZTRequest({
   }
 })
 
-export default ztRequest
+export default request
