@@ -4,6 +4,7 @@ import { Suspense } from "react"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import { IRootState, useAppDispatch, useAppSelector } from "./store"
 import { changeMessage } from "./store/modules/counter"
+import DemoClass from "./views/demo/demoClass"
 
 function App() {
   // const { count, message } = useSelector(
@@ -28,6 +29,8 @@ function App() {
   }
   return (
     <div className='App'>
+      <h2>测试 类组件</h2>
+      <DemoClass name='cyl' age={18} />
       <p>
         count:{count},message:{message}
       </p>
