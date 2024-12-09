@@ -1,11 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+// 类型推到
+const initialState = {
+  count: 0,
+  message: "测试"
+}
+
 const counterSlice = createSlice({
   name: "counter",
-  initialState: {
-    count: 0,
-    message: "测试"
-  },
+  initialState: initialState,
   reducers: {
     increment(state) {
       state.count += 1
