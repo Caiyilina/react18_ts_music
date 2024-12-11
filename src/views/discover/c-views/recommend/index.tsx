@@ -1,7 +1,7 @@
-import request from "@/service"
 import { useAppDispatch } from "@/store"
-import React, { FC, memo, ReactNode, useEffect, useState } from "react"
+import React, { FC, memo, ReactNode, useEffect } from "react"
 import { fetchBannersDataAction } from "./store/recommend"
+import TopBanner from "./c-cpns/top-banner"
 
 interface IProps {
   children?: ReactNode
@@ -13,7 +13,12 @@ const Recommend: FC<IProps> = memo(() => {
     dispatch(fetchBannersDataAction())
   })
 
-  return <div>Recommend</div>
+  return (
+    <div>
+      <TopBanner></TopBanner>
+      Recommend
+    </div>
+  )
 })
 
 export default Recommend
