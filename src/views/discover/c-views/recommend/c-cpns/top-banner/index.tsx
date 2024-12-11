@@ -2,8 +2,7 @@ import React, { ElementRef, FC, memo, ReactNode, useCallback, useRef, useState }
 import { BannerControl, BannerLeft, BannerRight, BannerWrapper } from "./style"
 import { useAppSelector } from "@/store"
 import { shallowEqual } from "react-redux"
-import { Button, Carousel } from "antd"
-import { LeftOutlined, RightOutlined } from "@ant-design/icons"
+import { Carousel } from "antd"
 import classNames from "classnames"
 
 interface IProps {
@@ -31,8 +30,6 @@ const TopBanner: FC<IProps> = memo(() => {
   }, [])
   const bgImageUrl: any =
     banners[currentIndex] && banners[currentIndex]?.imageUrl + "?imageView&blur=40x20"
-
-  console.log("bgImageUrl=--", bgImageUrl)
 
   return (
     <BannerWrapper style={{ background: `url('${bgImageUrl}') center center / 6000px` }}>

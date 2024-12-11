@@ -55,12 +55,12 @@ export const BannerRight = styled.a.attrs({
 `
 
 export const BannerControl = styled.div`
+  height: 64px;
   position: absolute;
   left: 0;
   right: 0;
   top: 50%;
-  /* transform: translateY(-50%); */
-  transform: translateY(-32px);
+  transform: translateY(-50%);
 
   .btn {
     position: absolute;

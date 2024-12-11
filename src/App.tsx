@@ -26,7 +26,6 @@ function App() {
         <div className='main'> {useRoutes(routes)}</div>
       </Suspense>
 
-      <Button>按钮按钮</Button>
       <AppFooter />
     </div>
   )

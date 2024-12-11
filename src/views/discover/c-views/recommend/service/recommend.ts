@@ -5,3 +5,8 @@ export function getBanners() {
     url: "/banner"
   })
 }
+export function getHotRecommend() {
+  return request.get({
+    url: "/personalized"
+  })
+}
