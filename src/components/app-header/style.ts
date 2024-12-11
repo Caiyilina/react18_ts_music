@@ -5,6 +5,7 @@ export const HeaderWrapper = styled.div`
   background-color: #242424;
   font-size: 14px;
   color: #fff;
+
   .content {
     display: flex;
     justify-content: space-between;
@@ -41,9 +42,9 @@ export const HeaderLeft = styled.div`
         color: #ccc;
       }
 
-      :last-of-type a {
+      &:last-of-type a {
         position: relative;
-        ::after {
+        &::after {
           position: absolute;
           content: "";
           width: 28px;
@@ -66,7 +67,7 @@ export const HeaderLeft = styled.div`
         display: inline-block;
         width: 12px;
         height: 7px;
-        bottom: -1px;
+        bottom: 0px;
         left: 50%;
         transform: translateX(-50%);
         background-position: -226px 0;
@@ -80,7 +81,7 @@ export const HeaderRight = styled.div`
   color: #787878;
   font-size: 12px;
 
-  > .search {
+  .search {
     width: 158px;
     height: 32px;
     border-radius: 16px;
@@ -107,7 +108,7 @@ export const HeaderRight = styled.div`
     }
   }
 
-  .sign-in {
+  .login {
     &:hover {
       text-decoration: underline;
       color: #fff;

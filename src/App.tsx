@@ -5,6 +5,7 @@ import { shallowEqual } from "react-redux"
 import { useAppDispatch, useAppSelector } from "./store"
 import AppHeader from "./components/app-header"
 import AppFooter from "./components/app-footer"
+import { Button } from "antd"
 
 function App() {
   const { count, message } = useAppSelector(
@@ -25,6 +26,7 @@ function App() {
         <div className='main'> {useRoutes(routes)}</div>
       </Suspense>
 
+      <Button>按钮按钮</Button>
       <AppFooter />
     </div>
   )
