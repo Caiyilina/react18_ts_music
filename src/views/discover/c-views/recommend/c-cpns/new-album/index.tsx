@@ -4,7 +4,7 @@ import AreaHeaderV1 from "@/components/area-header-v1"
 import { Carousel } from "antd"
 import { useAppSelector } from "@/store"
 import { shallowEqual } from "react-redux"
-import SongMenuItem from "@/components/song-menu-item"
+import NewAlbumItem from "@/components/new-album-item"
 
 interface IProps {
   children?: ReactNode
@@ -37,7 +37,7 @@ const NewAlbum: FC<IProps> = memo(() => {
               return (
                 <div className='page' key={item}>
                   {newAlbum.slice(item * 5, (item + 1) * 5).map(album => {
-                    return <SongMenuItem key={album.id} itemData={album}></SongMenuItem>
+                    return <NewAlbumItem key={album.id} itemData={album}></NewAlbumItem>
                   })}
                 </div>
               )

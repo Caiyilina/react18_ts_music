@@ -5,15 +5,16 @@ import { formatCount, getImageSize } from "@/utils/format"
 interface IProps {
   children?: ReactNode
   itemData: any
+  size?: number
 }
 
 const SongMenuItem: FC<IProps> = memo(props => {
-  const { itemData } = props
+  const { itemData, size = 140 } = props
 
   return (
     <MenuItemWrapper>
       <div className='top'>
-        <img src={getImageSize(itemData.picUrl, 140)} className='image' alt='' />
+        <img src={getImageSize(itemData.picUrl, size)} className='image' alt='' />
         <div className='cover  sprite_cover'>
           <div className='info sprite_cover'>
             <span>

@@ -19,3 +19,21 @@ export function getNewAlbums() {
     url: "/album/newest"
   })
 }
+
+export function getTopList(id: number) {
+  return request.get({
+    url: "/top/list",
+    params: {
+      id
+    }
+  })
+}
+
+export function getPlaylistDetail(id: number) {
+  return request.get({
+    url: "/playlist/detail",
+    params: {
+      id
+    }
+  })
+}

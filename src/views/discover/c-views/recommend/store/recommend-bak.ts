@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { getBanners, getHotRecommend, getNewAlbums, getPlaylistDetail } from "../service/recommend"
+import { getBanners, getHotRecommend, getNewAlbums } from "../service/recommend"
 
 export const fetchBannersDataAction = createAsyncThunk("banners", async (arg, { dispatch }) => {
   const res: any = await getBanners()
@@ -20,56 +20,14 @@ export const fetchNewAlbumDataAction = createAsyncThunk("newAlbum", async (arg, 
   console.log("打印fetchNewAlbum==>", res)
   dispatch(changeNewAlbumAction(res.albums))
 })
-// 重构 一次性发多个异步请求
-export const fetchRecommendDataAction = createAsyncThunk("fetchData", async (_, { dispatch }) => {
-  getBanners().then((res: any) => {
-    dispatch(changeBannersAction(res.banners))
-  })
-  getHotRecommend(8).then((res: any) => {
-    dispatch(changeHotRecommendAction(res.result))
-  })
-  getNewAlbums().then((res: any) => {
-    dispatch(changeNewAlbumAction(res.albums))
-  })
-})
-// 获取榜单
-export const fetchRankingDataAction = createAsyncThunk("rankingData", async (_, { dispatch }) => {
-  const rankingIds = [19723756, 3779629, 2884035]
-
-  // 获取榜单数据
-  for (const id of rankingIds) {
-    getPlaylistDetail(id).then((res: any) => {
-      // dispatch(changeHotRecommendAction(res.result))
-      switch (id) {
-        case 19723756:
-          dispatch(changeUpRankingAction(res.playlist))
-          break
-        case 3779629:
-          dispatch(changeNewRankingAction(res.playlist))
-          break
-        case 2884035: // 原创榜
-      }
-    })
-  }
-})
 
 interface IRecommendState {
   banners: any[]
   hotRecommend: any[]
   newAlbum: any[]
-  upRanking: object
-  newRanking: object
-  originRanking: object
 }
 
-const initialState: IRecommendState = {
-  banners: [],
-  hotRecommend: [],
-  newAlbum: [],
-  upRanking: {},
-  newRanking: {},
-  originRanking: {}
-}
+const initialState: IRecommendState = { banners: [], hotRecommend: [], newAlbum: [] }
 
 const recommendSlice = createSlice({
   name: "recommend",
