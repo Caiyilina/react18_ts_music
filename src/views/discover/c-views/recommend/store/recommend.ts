@@ -103,8 +103,8 @@ const recommendSlice = createSlice({
     changeNewAlbumAction(state, { payload }) {
       state.newAlbum = payload
     },
-    changeUpRankingAction(state, { payload }) {
-      state.upRanking = payload
+    changeRankingListAction(state, { payload }) {
+      state.rankingList = payload
     },
 
     changeSettleSingerAction(state, { payload }) {
@@ -129,9 +129,6 @@ export const {
   changeBannersAction,
   changeHotRecommendAction,
   changeNewAlbumAction,
-  changeUpRankingAction,
-  changeNewRankingAction,
-  changeOriginRankingAction,
   changeRankingListAction,
   changeSettleSingerAction
 } = recommendSlice.actions
