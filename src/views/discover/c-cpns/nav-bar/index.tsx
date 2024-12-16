@@ -1,6 +1,6 @@
 import React, { FC, memo, ReactNode } from "react"
 import { NavBarWrapper } from "./style"
-import { Link, NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { discoverMenu } from "@/assets/data/local-data"
 
 interface IProps {

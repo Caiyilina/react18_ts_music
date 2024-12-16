@@ -29,10 +29,12 @@ const routes: RouteObject[] = [
   {
     path: "/discover",
     element: <Discover></Discover>,
+
     children: [
       {
         path: "/discover/recommend",
-        element: <Recommend></Recommend>
+        element: <Recommend></Recommend>,
+        index: true
       },
       {
         path: "/discover/album",
