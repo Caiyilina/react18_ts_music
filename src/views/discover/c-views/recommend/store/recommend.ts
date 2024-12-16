@@ -107,7 +107,16 @@ const recommendSlice = createSlice({
       state.rankingList = payload
     },
 
-    changeSettleSingerAction(state, { payload }) {
+    /*************  ✨ Codeium Command ⭐  *************/
+    /**
+     * Set the state of settleSinger to the given payload.
+     * @param {IRecommendState} state - The current state of the recommend slice.
+     * @param {import("@reduxjs/toolkit").PayloadAction<any[]>} { payload } - The payload to set the state to.
+     */
+    /******  77fecbf7-266b-4fe0-ad47-8966a407613f  *******/ changeSettleSingerAction(
+      state,
+      { payload }
+    ) {
       state.settleSinger = payload
     }
   },

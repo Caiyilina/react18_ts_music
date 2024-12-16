@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "./store"
 import AppHeader from "./components/app-header"
 import AppFooter from "./components/app-footer"
 import { Button } from "antd"
+import PlayerBar from "./views/player/app-player-bar"
 
 function App() {
   const { count, message } = useAppSelector(
@@ -25,6 +26,9 @@ function App() {
       <Suspense fallback={<div>loading...</div>}>
         <div className='main'> {useRoutes(routes)}</div>
       </Suspense>
+
+      {/* 播放器工具栏 */}
+      <PlayerBar></PlayerBar>
 
       <AppFooter />
     </div>

@@ -2,11 +2,12 @@ import { configureStore } from "@reduxjs/toolkit"
 import counterReducer from "./modules/counter"
 import recommendReducer from "@/views/discover/c-views/recommend/store/recommend"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
-
+import playerReducer from "@/views/player/store/player"
 const store = configureStore({
   reducer: {
     counter: counterReducer,
-    recommend: recommendReducer
+    recommend: recommendReducer,
+    player: playerReducer
   }
 })
 // 1、通过typeof 获取state的类型
