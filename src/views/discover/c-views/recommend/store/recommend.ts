@@ -1,5 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { getBanners, getHotRecommend, getNewAlbums, getPlaylistDetail } from "../service/recommend"
+import {
+  getBanners,
+  getHotRecommend,
+  getNewAlbums,
+  getPlaylistDetail,
+  getSettleSinger
+} from "../service/recommend"
 
 export const fetchBannersDataAction = createAsyncThunk("banners", async (arg, { dispatch }) => {
   const res: any = await getBanners()
@@ -30,6 +36,9 @@ export const fetchRecommendDataAction = createAsyncThunk("fetchData", async (_, 
   })
   getNewAlbums().then((res: any) => {
     dispatch(changeNewAlbumAction(res.albums))
+  })
+  getSettleSinger(5).then((res: any) => {
+    dispatch(changeSettleSingerAction(res.artists))
   })
 })
 // 获取榜单
@@ -69,20 +78,16 @@ interface IRecommendState {
   banners: any[]
   hotRecommend: any[]
   newAlbum: any[]
-  upRanking: object
-  newRanking: object
-  originRanking: object
   rankingList: any[]
+  settleSinger: any[]
 }
 
 const initialState: IRecommendState = {
   banners: [],
   hotRecommend: [],
   newAlbum: [],
-  upRanking: {},
-  newRanking: {},
-  originRanking: {},
-  rankingList: []
+  rankingList: [],
+  settleSinger: []
 }
 
 const recommendSlice = createSlice({
@@ -101,14 +106,9 @@ const recommendSlice = createSlice({
     changeUpRankingAction(state, { payload }) {
       state.upRanking = payload
     },
-    changeNewRankingAction(state, { payload }) {
-      state.newRanking = payload
-    },
-    changeOriginRankingAction(state, { payload }) {
-      state.originRanking = payload
-    },
-    changeRankingListAction(state, { payload }) {
-      state.rankingList = payload
+
+    changeSettleSingerAction(state, { payload }) {
+      state.settleSinger = payload
     }
   },
   extraReducers: builder => {
@@ -132,7 +132,8 @@ export const {
   changeUpRankingAction,
   changeNewRankingAction,
   changeOriginRankingAction,
-  changeRankingListAction
+  changeRankingListAction,
+  changeSettleSingerAction
 } = recommendSlice.actions
 
 export default recommendSlice.reducer

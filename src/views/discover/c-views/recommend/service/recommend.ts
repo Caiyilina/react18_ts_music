@@ -37,3 +37,26 @@ export function getPlaylistDetail(id: number) {
     }
   })
 }
+
+// 获取推荐-入驻歌手
+export function getSettleSinger(limit = 30) {
+  return request.get({
+    url: "/artist/list",
+    params: {
+      limit
+    }
+  })
+}
+
+// 获取推荐-热门主播
+export function getHotDJ() {
+  return request.get({
+    url: "/dj/hot"
+  })
+}
+
+export function getHotAnchor() {
+  return request.get({
+    url: "/dj/cat"
+  })
+}
