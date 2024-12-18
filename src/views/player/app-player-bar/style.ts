@@ -21,7 +21,12 @@ export const PlayerBarWrapper = styled.div`
     height: 47px;
   }
 `
-export const ButtonControl = styled.div`
+
+interface IButtonControlProps {
+  isPlaying: boolean
+}
+
+export const ButtonControl = styled.div<IButtonControlProps>`
   display: flex;
   align-items: center;
 
@@ -40,7 +45,7 @@ export const ButtonControl = styled.div`
     height: 36px;
     margin: 0 8px;
     /* TODO */
-    background-position: 0 -204px;
+    background-position: 0 ${props => (props.isPlaying ? "-165px" : "-204px")};
   }
 
   .next {
@@ -99,7 +104,7 @@ export const PlayInfo = styled.div`
           width: 22px;
           height: 24px;
           border: none;
-          margin-top: -7px;
+          margin-top: -5px;
           background: url(${require("@/assets/img/sprite_icon.png")}) 0 -250px;
           &::after {
             display: none;
@@ -123,7 +128,7 @@ export const Operator = styled.div`
   display: flex;
   position: relative;
   top: 5px;
-
+  align-items: flex-start;
   .btn {
     width: 25px;
     height: 25px;

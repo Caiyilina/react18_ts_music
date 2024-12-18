@@ -3,7 +3,7 @@ import { ButtonControl, Operator, PlayerBarWrapper, PlayInfo } from "./style"
 import { Link } from "react-router-dom"
 import { Slider } from "antd"
 import { useAppSelector } from "@/store"
-import { getImageSize } from "@/utils/format"
+import { formatTimeStr, getImageSize } from "@/utils/format"
 import { shallowEqual } from "react-redux"
 import { getSongPlayUrl } from "@/utils/handle-player"
 
@@ -12,37 +12,81 @@ interface IProps {
 }
 
 const PlayerBar: FC<IProps> = memo(() => {
-  const { currentSong } = useAppSelector(
+  const { currentSong = {} } = useAppSelector(
     state => ({
       currentSong: state.player.currentSong
     }),
     shallowEqual
   )
-  const [progress, setProgress] = useState(0)
   const audioRef = useRef<HTMLAudioElement>(null)
+  // 播放进度
+  const [progress, setProgress] = useState(0)
+  // 记录播放状态
+  const [isPlaying, setIsPlaying] = useState(false)
+  // 总时间
+  const [duration, setDuration] = useState(0)
+  // 当前播放时间
+  const [currentTime, setCurrentTime] = useState(0)
+  // 当前是否改变进度条
+  const [isSlider, setIsSlider] = useState(false)
 
   useEffect(() => {
     if (!audioRef.current) return
-    audioRef.current!.src = getSongPlayUrl(currentSong.url)
+    if (!currentSong.id) return
+    audioRef.current!.src = getSongPlayUrl(currentSong.id)
     audioRef.current
       ?.play()
       .then(() => {
-        console.log("播放成功")
+        setIsPlaying(true)
       })
-      .catch(() => {
-        console.log("播放失败")
+      .catch(err => {
+        setIsPlaying(false)
+        console.log("播放失败", err)
       })
+    // 2、获取音乐总时长
+    setDuration(currentSong.dt)
   }, [currentSong, audioRef])
   // 音乐播放进度
-  const handleTimeUpdate = (e: any) => {
-    console.log("音乐播放==", e)
+  const handleTimeUpdate = () => {
+    if (isSlider) return
+    // 1、获取当前播放的时间
+    const currentTime = audioRef.current!.currentTime * 1000
+    // 2、计算当前歌曲进度
+    const progress = (currentTime / duration) * 100
+    setCurrentTime(currentTime)
+    setProgress(progress)
+    // 3、根据当前时间匹配对应的歌词
+  }
+  const handlePlayBtnClick = () => {
+    if (!audioRef.current) return
+    if (audioRef.current.paused) {
+      audioRef.current?.play().catch(() => {
+        setIsPlaying(false)
+      })
+      setIsPlaying(true)
+    } else {
+      audioRef.current.pause()
+      setIsPlaying(false)
+    }
+  }
+
+  // 进度条改变
+  const handleSliderChange = (value: number) => {
+    setIsSlider(true)
+
+    // 1、获取当前播放的时间
+    const currentTime = (value / 100) * duration
+    setCurrentTime(currentTime)
+    // 2、设置当前播放的时间
+    audioRef.current!.currentTime = currentTime / 1000
+    setProgress(value)
   }
   return (
     <PlayerBarWrapper className='sprite_playbar'>
       <div className='content wrap-v2'>
-        <ButtonControl>
+        <ButtonControl isPlaying={isPlaying}>
           <button className='btn prev sprite_playbar'></button>
-          <button className='btn play sprite_playbar'></button>
+          <button className='btn play sprite_playbar' onClick={handlePlayBtnClick}></button>
           <button className='btn next sprite_playbar'></button>
         </ButtonControl>
         <PlayInfo>
@@ -52,14 +96,22 @@ const PlayerBar: FC<IProps> = memo(() => {
           <div className='info'>
             <div className='song'>
               <span className='song-name'>{currentSong?.name || "-"}</span>
-              <span className='singer-name'>{currentSong?.ar[0]?.name || "-"}</span>
+              <span className='singer-name'>{currentSong?.ar?.[0]?.name || "-"}</span>
             </div>
             <div className='progress'>
-              <Slider value={progress}></Slider>
+              <Slider
+                tooltip={{ formatter: null }}
+                step={0.5}
+                value={progress}
+                onChange={handleSliderChange}
+                onChangeComplete={() => {
+                  setIsSlider(false)
+                }}
+              ></Slider>
               <div className='time'>
-                <span className='current'>00:52</span>
+                <span className='current'>{formatTimeStr(currentTime)}</span>
                 <span className='divider'>|</span>
-                <span className='duration'>00:52</span>
+                <span className='duration'>{formatTimeStr(duration)}</span>
               </div>
             </div>
           </div>

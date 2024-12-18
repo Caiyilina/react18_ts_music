@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const TopRanking: FC<IProps> = memo(() => {
-  const { rankingList } = useAppSelector(
+  const { rankingList = [] } = useAppSelector(
     state => ({
       rankingList: state.recommend.rankingList
     }),

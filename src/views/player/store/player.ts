@@ -1,102 +1,52 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { getSongDetail, getSongLyric } from "../service/player."
+import { ILyric, parseLyric } from "@/utils/parse-lyric"
+
+export const fetchCurrentSongAction = createAsyncThunk(
+  "currentSong",
+  async (id: number, { dispatch }) => {
+    const res: any = await getSongDetail(id)
+    console.log("获取歌曲 res==>", res)
+
+    dispatch(changeCurrentSongAction(res.songs[0]))
+  }
+)
+// 获取歌词
+export const fetchLyricAction = createAsyncThunk("lyric", async (id: number, { dispatch }) => {
+  const res: any = await getSongLyric(id)
+  console.log("获取歌词 res==>", res)
+  // 1、获取歌词字符串
+  const lyricStr = res.lrc.lyric
+  // 2、解析歌词字符串
+  const lyrics = parseLyric(lyricStr)
+  console.log("lyrics==>", lyrics)
+
+  // 3、保存歌词
+  dispatch(changeLyricListAction(lyrics))
+})
 
 interface IPlayerState {
   currentSong: any
+  lyrics: ILyric[]
 }
 const initialState: IPlayerState = {
-  currentSong: {
-    name: "海阔天空",
-    id: 347230,
-    pst: 0,
-    t: 0,
-    ar: [
-      {
-        id: 11127,
-        name: "Beyond",
-        tns: [],
-        alias: []
-      }
-    ],
-    alia: [],
-    pop: 100,
-    st: 0,
-    rt: "600902000004240302",
-    fee: 1,
-    v: 120,
-    crbt: null,
-    cf: "",
-    al: {
-      id: 34209,
-      name: "海阔天空",
-      picUrl: "https://p2.music.126.net/iAwVf8ag_45csIUuh1wSZg==/109951168912558470.jpg",
-      tns: [],
-      pic_str: "109951168912558470",
-      pic: 109951168912558460
-    },
-    dt: 326000,
-    h: {
-      br: 320001,
-      fid: 0,
-      size: 13042460,
-      vd: -5628,
-      sr: 44100
-    },
-    m: {
-      br: 192001,
-      fid: 0,
-      size: 7825493,
-      vd: -3050,
-      sr: 44100
-    },
-    l: {
-      br: 128001,
-      fid: 0,
-      size: 5217010,
-      vd: -1489,
-      sr: 44100
-    },
-    sq: {
-      br: 797831,
-      fid: 0,
-      size: 32511640,
-      vd: -5286,
-      sr: 44100
-    },
-    hr: null,
-    a: null,
-    cd: "1",
-    no: 1,
-    rtUrl: null,
-    ftype: 0,
-    rtUrls: [],
-    djId: 0,
-    copyright: 1,
-    s_id: 0,
-    mark: 17179877376,
-    originCoverType: 1,
-    originSongSimpleData: null,
-    tagPicList: null,
-    resourceState: true,
-    version: 120,
-    songJumpInfo: null,
-    entertainmentTags: null,
-    awardTags: null,
-    single: 0,
-    noCopyrightRcmd: null,
-    mv: 376199,
-    rtype: 0,
-    rurl: null,
-    mst: 9,
-    cp: 1416737,
-    publishTime: 747504000000,
-    tns: ["Boundless Oceans, Vast Skies"]
-  }
+  currentSong: {},
+  lyrics: []
 }
 
 const playerSlice = createSlice({
   name: "player",
   initialState,
-  reducers: {}
+  reducers: {
+    changeCurrentSongAction(state, { payload }) {
+      state.currentSong = payload
+    },
+    changeLyricListAction(state, { payload }) {
+      state.lyrics = payload
+    }
+  }
 })
+
+export const { changeCurrentSongAction, changeLyricListAction } = playerSlice.actions
 
 export default playerSlice.reducer
