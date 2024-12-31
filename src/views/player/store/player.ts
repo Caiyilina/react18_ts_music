@@ -26,6 +26,9 @@ export const fetchCurrentSongAction = createAsyncThunk<void, number, { state: IR
     // 3、更新列表
     dispatch(changePlaySongListAction(newPlaySongList))
     dispatch(changePlaySongIndexAction(newPlaySongList.length - 1))
+
+    // 4、获取歌词
+    dispatch(fetchLyricAction(id))
   }
 )
 // 获取歌词
@@ -49,6 +52,38 @@ export const fetchDailyRecommendAction = createAsyncThunk(
     const res: any = await getRecommendSongs()
     console.log("获取每日推荐 res==>", res)
     dispatch(changePlaySongListAction(res.data.dailySongs))
+  }
+)
+
+// 切换歌曲
+export const changeMusicAction = createAsyncThunk<void, boolean, { state: IRootState }>(
+  "changeMusic",
+  async (isNext: boolean, { getState, dispatch }) => {
+    // 1、获取播放模式、索引、播放列表
+    const player = getState().player
+    const playMode = player.playMode
+    const songIndex = player.playSongIndex
+    const songList = player.playSongList
+    // 2、获取下一首歌的索引
+    let newIndex = songIndex
+    if (playMode === 1) {
+      // 随机播放
+      newIndex = Math.floor(Math.random() * songList.length)
+      console.log(playMode, "随机播放 newIndex", newIndex)
+    } else {
+      // 顺序播放，单曲循环
+      newIndex = isNext ? songIndex + 1 : songIndex - 1
+      console.log(playMode, "顺序播放，单曲循环newIndex==>", newIndex)
+    }
+    // 处理newIndex
+    if (newIndex < 0) {
+      newIndex = songList.length - 1
+    }
+    // 3、获取当前的歌曲
+    const currentSong = songList[newIndex]
+    // 4、切换歌曲
+    dispatch(changeCurrentSongAction(currentSong))
+    dispatch(changePlaySongIndexAction(newIndex))
   }
 )
 

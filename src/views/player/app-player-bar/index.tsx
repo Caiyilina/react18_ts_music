@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/store"
 import { formatTimeStr, getImageSize } from "@/utils/format"
 import { shallowEqual } from "react-redux"
 import { getSongPlayUrl } from "@/utils/handle-player"
-import { changeLyricIndexAction, changePlayModeAction } from "../store/player"
+import { changeLyricIndexAction, changeMusicAction, changePlayModeAction } from "../store/player"
 
 interface IProps {
   children?: ReactNode
@@ -17,7 +17,7 @@ const PlayerBar: FC<IProps> = memo(() => {
     currentSong = {},
     lyrics = [],
     lyricIndex = -1,
-    playMode = 0
+    playMode
   } = useAppSelector(
     state => ({
       currentSong: state.player.currentSong,
@@ -116,15 +116,24 @@ const PlayerBar: FC<IProps> = memo(() => {
   // 播放模式改变
   const handleLoopClick = () => {
     const newPlayMode = (playMode + 1) % 3 //0变成1，1变成2，2变成0
+    console.log("播放模式改变==>", newPlayMode)
+
     dispatch(changePlayModeAction(newPlayMode))
+  }
+  // 切换歌曲
+  const handleChangeMusic = (isNext = true) => {
+    dispatch(changeMusicAction(isNext))
   }
   return (
     <PlayerBarWrapper className='sprite_playbar'>
       <div className='content wrap-v2'>
         <ButtonControl isPlaying={isPlaying}>
-          <button className='btn prev sprite_playbar'></button>
+          <button
+            className='btn prev sprite_playbar'
+            onClick={() => handleChangeMusic(false)}
+          ></button>
           <button className='btn play sprite_playbar' onClick={handlePlayBtnClick}></button>
-          <button className='btn next sprite_playbar'></button>
+          <button className='btn next sprite_playbar' onClick={() => handleChangeMusic()}></button>
         </ButtonControl>
         <PlayInfo>
           <Link to='/player'>
