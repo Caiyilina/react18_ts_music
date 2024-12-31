@@ -26,7 +26,7 @@ function App() {
   useEffect(() => {
     //TODO   获取某一首歌曲、获取歌词、获取每日推荐
     dispatch(fetchCurrentSongAction(475530855))
-    dispatch(fetchLyricAction(475530855))
+
     dispatch(fetchDailyRecommendAction())
   })
 
