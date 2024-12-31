@@ -1,14 +1,31 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { getSongDetail, getSongLyric } from "../service/player."
+import { getRecommendSongs, getSongDetail, getSongLyric } from "../service/player."
 import { ILyric, parseLyric } from "@/utils/parse-lyric"
+import { IRootState } from "@/store"
 
-export const fetchCurrentSongAction = createAsyncThunk(
+// 设置泛型
+export const fetchCurrentSongAction = createAsyncThunk<void, number, { state: IRootState }>(
   "currentSong",
-  async (id: number, { dispatch }) => {
-    const res: any = await getSongDetail(id)
-    console.log("获取歌曲 res==>", res)
+  async (id: number, { dispatch, getState }) => {
+    // 1、从列表中尝试是否找到当前歌曲
+    const playSongList = getState().player.playSongList
+    const findIndex = playSongList.findIndex(item => item.id === id)
+    if (findIndex !== -1) {
+      // 找到歌曲
+      dispatch(changeCurrentSongAction(playSongList[findIndex]))
+      dispatch(changePlaySongIndexAction(findIndex))
+      return
+    }
 
-    dispatch(changeCurrentSongAction(res.songs[0]))
+    // 2、找不到歌曲，就请求列表
+    const res: any = await getSongDetail(id)
+    const song = res.songs[0]
+    dispatch(changeCurrentSongAction(song))
+    const newPlaySongList = [...playSongList]
+    newPlaySongList.push(song)
+    // 3、更新列表
+    dispatch(changePlaySongListAction(newPlaySongList))
+    dispatch(changePlaySongIndexAction(newPlaySongList.length - 1))
   }
 )
 // 获取歌词
@@ -25,15 +42,31 @@ export const fetchLyricAction = createAsyncThunk("lyric", async (id: number, { d
   dispatch(changeLyricListAction(lyrics))
 })
 
+// 获取每日推荐
+export const fetchDailyRecommendAction = createAsyncThunk(
+  "dailyRecommend",
+  async (_, { dispatch }) => {
+    const res: any = await getRecommendSongs()
+    console.log("获取每日推荐 res==>", res)
+    dispatch(changePlaySongListAction(res.data.dailySongs))
+  }
+)
+
 interface IPlayerState {
   currentSong: any
   lyrics: ILyric[]
   lyricIndex: number
+  playSongList: any[]
+  playSongIndex: number
+  playMode: number
 }
 const initialState: IPlayerState = {
-  currentSong: {},
-  lyrics: [],
-  lyricIndex: -1
+  currentSong: {}, // 当前歌曲
+  lyrics: [], // 歌词
+  lyricIndex: -1, // 歌词索引
+  playSongList: [], // 播放列表
+  playSongIndex: -1, // 播放歌曲的下标
+  playMode: 0 // 播放模式，0:顺序播放，1:随机播放，2:单曲循环
 }
 
 const playerSlice = createSlice({
@@ -48,11 +81,26 @@ const playerSlice = createSlice({
     },
     changeLyricIndexAction(state, { payload }) {
       state.lyricIndex = payload
+    },
+    changePlaySongListAction(state, { payload }) {
+      state.playSongList = payload
+    },
+    changePlaySongIndexAction(state, { payload }) {
+      state.playSongIndex = payload
+    },
+    changePlayModeAction(state, { payload }) {
+      state.playMode = payload
     }
   }
 })
 
-export const { changeCurrentSongAction, changeLyricListAction, changeLyricIndexAction } =
-  playerSlice.actions
+export const {
+  changeCurrentSongAction,
+  changeLyricListAction,
+  changeLyricIndexAction,
+  changePlaySongListAction,
+  changePlaySongIndexAction,
+  changePlayModeAction
+} = playerSlice.actions
 
 export default playerSlice.reducer

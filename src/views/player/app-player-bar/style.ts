@@ -123,8 +123,10 @@ export const PlayInfo = styled.div`
     }
   }
 `
-
-export const Operator = styled.div`
+interface IOperatorProps {
+  playMode: number
+}
+export const Operator = styled.div<IOperatorProps>`
   display: flex;
   position: relative;
   top: 5px;
@@ -155,6 +157,18 @@ export const Operator = styled.div`
 
     .loop {
       /* TODO */
+      background-position: ${props => {
+        switch (props.playMode) {
+          case 0:
+            return "-66px -248px"
+          case 1:
+            return "-66px -344px"
+          case 2:
+            return "-3px -344px"
+          default:
+            return "-3px -248px"
+        }
+      }};
     }
 
     .playlist {

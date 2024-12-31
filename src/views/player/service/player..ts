@@ -18,3 +18,10 @@ export function getSongLyric(id: number) {
     }
   })
 }
+
+// 获取每日推荐歌曲
+export function getRecommendSongs() {
+  return request.get({
+    url: "/recommend/songs"
+  })
+}

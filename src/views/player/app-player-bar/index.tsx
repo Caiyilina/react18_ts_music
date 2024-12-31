@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/store"
 import { formatTimeStr, getImageSize } from "@/utils/format"
 import { shallowEqual } from "react-redux"
 import { getSongPlayUrl } from "@/utils/handle-player"
-import { changeLyricIndexAction } from "../store/player"
+import { changeLyricIndexAction, changePlayModeAction } from "../store/player"
 
 interface IProps {
   children?: ReactNode
@@ -16,12 +16,14 @@ const PlayerBar: FC<IProps> = memo(() => {
   const {
     currentSong = {},
     lyrics = [],
-    lyricIndex = -1
+    lyricIndex = -1,
+    playMode = 0
   } = useAppSelector(
     state => ({
       currentSong: state.player.currentSong,
       lyrics: state.player.lyrics,
-      lyricIndex: state.player.lyricIndex
+      lyricIndex: state.player.lyricIndex,
+      playMode: state.player.playMode
     }),
     shallowEqual
   )
@@ -111,6 +113,11 @@ const PlayerBar: FC<IProps> = memo(() => {
     audioRef.current!.currentTime = currentTime / 1000
     setProgress(value)
   }
+  // 播放模式改变
+  const handleLoopClick = () => {
+    const newPlayMode = (playMode + 1) % 3 //0变成1，1变成2，2变成0
+    dispatch(changePlayModeAction(newPlayMode))
+  }
   return (
     <PlayerBarWrapper className='sprite_playbar'>
       <div className='content wrap-v2'>
@@ -146,14 +153,14 @@ const PlayerBar: FC<IProps> = memo(() => {
             </div>
           </div>
         </PlayInfo>
-        <Operator>
+        <Operator playMode={playMode}>
           <div className='left'>
             <button className='sprite_playbar btn favor'></button>
             <button className='sprite_playbar btn share'></button>
           </div>
           <div className='right sprite_playbar'>
             <button className='sprite_playbar btn volume'></button>
-            <button className='sprite_playbar btn loop'></button>
+            <button className='sprite_playbar btn loop' onClick={handleLoopClick}></button>
             <button className='sprite_playbar btn playlist'></button>
           </div>
         </Operator>
