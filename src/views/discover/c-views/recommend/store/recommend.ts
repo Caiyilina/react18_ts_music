@@ -69,7 +69,8 @@ export const fetchRankingDataAction = createAsyncThunk("rankingData", async (_, 
     promises.push(getPlaylistDetail(id))
   }
   Promise.all(promises).then(res => {
-    const playlists = res.map((item: any) => item.playlist)
+    // filter过滤出有playlist的
+    const playlists = res.filter((item: any) => item.playlist).map((item: any) => item.playlist)
     dispatch(changeRankingListAction(playlists))
   })
 })
@@ -107,16 +108,7 @@ const recommendSlice = createSlice({
       state.rankingList = payload
     },
 
-    /*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * Set the state of settleSinger to the given payload.
-     * @param {IRecommendState} state - The current state of the recommend slice.
-     * @param {import("@reduxjs/toolkit").PayloadAction<any[]>} { payload } - The payload to set the state to.
-     */
-    /******  77fecbf7-266b-4fe0-ad47-8966a407613f  *******/ changeSettleSingerAction(
-      state,
-      { payload }
-    ) {
+    changeSettleSingerAction(state, { payload }) {
       state.settleSinger = payload
     }
   },

@@ -56,7 +56,7 @@ const PlayerBar: FC<IProps> = memo(() => {
     // 2、获取音乐总时长
     setDuration(currentSong.dt)
   }, [currentSong, audioRef])
-  // 音乐播放进度
+  // 监听音乐播放进度
   const handleTimeUpdate = () => {
     if (isSlider) return
     // 1、获取当前播放的时间
@@ -88,6 +88,17 @@ const PlayerBar: FC<IProps> = memo(() => {
       content: lyrics[index]?.text,
       duration: 0 // 不自动关闭
     })
+  }
+  // 监听音乐播放结束
+  const handleAudioEnded = () => {
+    if (playMode === 2) {
+      // 单曲循环
+      audioRef.current!.currentTime = 0
+      audioRef.current?.play()
+    } else {
+      // 播放下一首
+      handleChangeMusic(true)
+    }
   }
   const handlePlayBtnClick = () => {
     if (!audioRef.current) return
@@ -174,7 +185,7 @@ const PlayerBar: FC<IProps> = memo(() => {
           </div>
         </Operator>
       </div>
-      <audio ref={audioRef} onTimeUpdate={handleTimeUpdate} />
+      <audio ref={audioRef} onTimeUpdate={handleTimeUpdate} onEnded={handleAudioEnded} />
     </PlayerBarWrapper>
   )
 })

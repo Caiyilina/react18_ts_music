@@ -4,6 +4,7 @@ import { ILyric, parseLyric } from "@/utils/parse-lyric"
 import { IRootState } from "@/store"
 
 // 设置泛型
+// 当前歌曲
 export const fetchCurrentSongAction = createAsyncThunk<void, number, { state: IRootState }>(
   "currentSong",
   async (id: number, { dispatch, getState }) => {
@@ -78,6 +79,8 @@ export const changeMusicAction = createAsyncThunk<void, boolean, { state: IRootS
     // 处理newIndex
     if (newIndex < 0) {
       newIndex = songList.length - 1
+    } else if (newIndex > songList.length - 1) {
+      newIndex = 0
     }
     // 3、获取当前的歌曲
     const currentSong = songList[newIndex]
