@@ -1,23 +1,31 @@
 import React, { FC, memo, ReactNode, useEffect, useRef, useState } from "react"
 import { ButtonControl, Operator, PlayerBarWrapper, PlayInfo } from "./style"
 import { Link } from "react-router-dom"
-import { Slider } from "antd"
-import { useAppSelector } from "@/store"
+import { message, Slider } from "antd"
+import { useAppDispatch, useAppSelector } from "@/store"
 import { formatTimeStr, getImageSize } from "@/utils/format"
 import { shallowEqual } from "react-redux"
 import { getSongPlayUrl } from "@/utils/handle-player"
+import { changeLyricIndexAction } from "../store/player"
 
 interface IProps {
   children?: ReactNode
 }
 
 const PlayerBar: FC<IProps> = memo(() => {
-  const { currentSong = {} } = useAppSelector(
+  const {
+    currentSong = {},
+    lyrics = [],
+    lyricIndex = -1
+  } = useAppSelector(
     state => ({
-      currentSong: state.player.currentSong
+      currentSong: state.player.currentSong,
+      lyrics: state.player.lyrics,
+      lyricIndex: state.player.lyricIndex
     }),
     shallowEqual
   )
+  const dispatch = useAppDispatch()
   const audioRef = useRef<HTMLAudioElement>(null)
   // 播放进度
   const [progress, setProgress] = useState(0)
@@ -50,12 +58,34 @@ const PlayerBar: FC<IProps> = memo(() => {
   const handleTimeUpdate = () => {
     if (isSlider) return
     // 1、获取当前播放的时间
-    const currentTime = audioRef.current!.currentTime * 1000
+    const currentTime = audioRef.current!.currentTime * 1000 // 秒转毫秒
     // 2、计算当前歌曲进度
     const progress = (currentTime / duration) * 100
     setCurrentTime(currentTime)
     setProgress(progress)
     // 3、根据当前时间匹配对应的歌词
+    //  currentTime、lyrics
+    let index = lyrics.length - 1 // 默认最后一项
+    for (let i = 0; i < lyrics.length; i++) {
+      const item = lyrics[i]
+      if (item.time > currentTime) {
+        index = i - 1
+        break // 退出循环
+      }
+    }
+    if (index === lyricIndex) return
+    // 4、匹配到歌词，保存索引到state中
+    dispatch(changeLyricIndexAction(index))
+
+    // 5、展示对应的歌词
+    message.config({
+      top: "99%"
+    })
+    message.open({
+      key: "lyric",
+      content: lyrics[index]?.text,
+      duration: 0 // 不自动关闭
+    })
   }
   const handlePlayBtnClick = () => {
     if (!audioRef.current) return

@@ -46,3 +46,41 @@ button {
 .sprite_playbar {
   background: url(../img/playbar_sprite.png) no-repeat 0 9999px;
 }
+.sprite_playlist {
+  background: url(../img/playlist_sprite.png) no-repeat 0 9999px;
+}
+.sprite_button {
+  background: url(../img/sprite_button.png) no-repeat 0 9999px;
+}
+
+.sprite_button2 {
+  background: url(../img/sprite_button2.png) no-repeat 0 9999px;
+}
+
+.sprite_table {
+  background: url(../img/sprite_table.png) no-repeat 0 9999px;
+}
+
+.image_cover {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  text-indent: -9999px;
+  background: url(../img/sprite_cover.png) no-repeat -145px -57px;
+}
+
+.ant-message .ant-message-notice-content {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 60px;
+  background: rgba(0, 0, 0, 0.6) !important;
+  color: #fc8d8d;
+}
+
+span:hover.link {
+  text-decoration: underline;
+  cursor: pointer;
+}

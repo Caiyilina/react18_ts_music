@@ -17,6 +17,7 @@ export function parseLyric(lyricStr: string) {
     const result = parseExp.exec(line)
 
     if (!result) continue
+
     // 2.2 获取每一组数据的时间
     const time1 = Number(result[1]) * 60 * 1000 //分转毫秒
     const time2 = Number(result[2]) * 1000 //秒转毫秒
