@@ -25,3 +25,13 @@ export function getRecommendSongs() {
     url: "/recommend/songs"
   })
 }
+
+// 获取歌单详情
+export function getPlaylistDetail(id: number) {
+  return request.get({
+    url: "/playlist/detail",
+    params: {
+      id
+    }
+  })
+}

@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { getRecommendSongs, getSongDetail, getSongLyric } from "../service/player."
+import {
+  getPlaylistDetail,
+  getRecommendSongs,
+  getSongDetail,
+  getSongLyric
+} from "../service/player."
 import { ILyric, parseLyric } from "@/utils/parse-lyric"
 import { IRootState } from "@/store"
 
@@ -53,6 +58,19 @@ export const fetchDailyRecommendAction = createAsyncThunk(
     const res: any = await getRecommendSongs()
     console.log("获取每日推荐 res==>", res)
     dispatch(changePlaySongListAction(res.data.dailySongs))
+  }
+)
+// 获取指定歌单的播放列表
+export const fetchPlayListAction = createAsyncThunk<void, number, { state: IRootState }>(
+  "playList",
+  async (id: number, { dispatch }) => {
+    const res: any = await getPlaylistDetail(id)
+    const list = res?.playlist?.tracks
+    // 保存播放列表
+    dispatch(changePlaySongListAction(list))
+    // 切换歌曲
+    const songId: number = list?.[0]?.id
+    dispatch(fetchCurrentSongAction(songId))
   }
 )
 
